@@ -12,6 +12,8 @@
     justify-content: space-around;
     gap: 20px;
     a {
+      display: flex;
+      align-items: center;
       font-size: 14px;
       color: rgba(236, 236, 241) !important;
       text-decoration: none;
