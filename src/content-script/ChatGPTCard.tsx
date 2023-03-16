@@ -4,15 +4,14 @@ import ChatGPTQuery from './ChatGPTQuery'
 import { useContext } from 'react'
 import MyContext from './context'
 
-
 function ChatGPTCard() {
   const [triggered, setTriggered] = useState(false)
   const [selectedText, setSelectedText] = useState('')
   const [buttonPosition, setButtonPosition] = useState({ x: 0, y: 0 })
-  const [showButton, setShowButton] = useState(false)
+  
   const [disableHandleDown, setDisableHandleDown] = useState(false)
 
-  const [, setNextQuestion, overComponents, setOverComponents] = useContext(MyContext)
+  const [, setNextQuestion, overComponents, setOverComponents, showIcon, setShowIcon] = useContext(MyContext)
 
   useEffect(() => {
     const handleSelectionChange = () => {
@@ -26,7 +25,7 @@ function ChatGPTCard() {
     }
     const handleMouseUp = () => {
       if (selectedText) {
-        setShowButton(true)
+        setShowIcon(true)
       }
     }
     document.addEventListener('mouseup', handleMouseUp)
@@ -41,7 +40,7 @@ function ChatGPTCard() {
     const handleMouseDown = () => {
       if (!disableHandleDown) {
         setSelectedText('')
-        setShowButton(false)
+        setShowIcon(false)
        
       }
       if(overComponents === false){
@@ -57,7 +56,7 @@ function ChatGPTCard() {
 
   return (
     <>
-      {(showButton && buttonPosition.y && buttonPosition.x !== 0 ) && (
+      {(showIcon && buttonPosition.y && buttonPosition.x !== 0 ) && (
         <div
           className="icon-container"
           style={{
@@ -67,7 +66,7 @@ function ChatGPTCard() {
           }}
           onClick={() => {
             setTriggered(true)
-            setShowButton(false)
+            setShowIcon(false)
             setNextQuestion(false)
           }}
           onMouseOver={() => {

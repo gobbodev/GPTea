@@ -14,11 +14,11 @@ interface Props {
 }
 
 function ChatGPTQuery(props: Props) {
-  const [answer, setAnswer] = useState<Answer | null>(null) //Answer ou null?
+  const [answer, setAnswer] = useState<Answer | null>(null) 
   const [error, setError] = useState('')
   const [retry, setRetry] = useState(0)
   const [done, setDone] = useState(false)
-  const [nextQuestion, setNextQuestion, overComponents, setOverComponents] = useContext(MyContext)
+  const [nextQuestion, setNextQuestion, , setOverComponents, , setShowIcon] = useContext(MyContext)
   const [showTip, setShowTip] = useState(false)
   const [status, setStatus] = useState<QueryStatus>()
   const [isTextCopy, setIsTextCopy] = useState(false)
@@ -116,7 +116,9 @@ function ChatGPTQuery(props: Props) {
         <div className="copy-container">
           <span className="copy-icon" onClick={() => {
              copyToClipboard()
-             setIsTextCopy(true)}}>
+             setIsTextCopy(true)
+             setShowIcon(false)
+             }}>
             {isTextCopy === false ? <CopyIcon size={14}/> : <CheckIcon  size={14}/>}
           </span>
         </div>

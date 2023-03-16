@@ -1,14 +1,23 @@
 import { useState } from 'react'
 import ChatGPTCard from './ChatGPTCard'
 import MyContext from './context'
-// Importa o tipo QueryStatus do módulo ./ChatGPTQuery, que define os possíveis estados da consulta ao GPT-3
-// Importa o componente Promotion do módulo ./Promotion, que renderiza uma promoção baseada na resposta do GPT-3
 
 function ChatGPTContainer() {
+  const [showIcon, setShowIcon] = useState(false)
   const [nextQuestion, setNextQuestion] = useState(false)
   const [overComponents, setOverComponents] = useState(false)
+
   return (
-    <MyContext.Provider value={[nextQuestion, setNextQuestion, overComponents, setOverComponents]}>
+    <MyContext.Provider
+      value={[
+        nextQuestion,
+        setNextQuestion,
+        overComponents,
+        setOverComponents,
+        showIcon,
+        setShowIcon,
+      ]}
+    >
       <ChatGPTCard />
     </MyContext.Provider>
   )

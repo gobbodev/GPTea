@@ -1,17 +1,6 @@
 import { defaults } from 'lodash-es'
 import Browser from 'webextension-polyfill'
 
-
-
-// fica assim?:
-/*
-questionMark{
-
-    title: 'Question Mark',
-    desc: 'When your query ends with a question mark (?)',
-}
-*/
-
 export enum Theme {
   Auto = 'auto',
   Light = 'light',

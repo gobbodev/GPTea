@@ -5,8 +5,10 @@ const MyContext = createContext<
     boolean,
     React.Dispatch<React.SetStateAction<boolean>>,
     boolean,
+    React.Dispatch<React.SetStateAction<boolean>>,
+    boolean,
     React.Dispatch<React.SetStateAction<boolean>>
   ]
->([false, () => {}, false, () => {}])
+>([false, () => {}, false, () => {}, false, () => {}])
 
 export default MyContext
