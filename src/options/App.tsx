@@ -47,7 +47,7 @@ function OptionsPage(props: { theme: Theme; onThemeChange: (theme: Theme) => voi
             target="_blank"
             rel="noreferrer" // https://ferramentasseo.club/rel-nofollow-noreferrer-noopener-external
           >
-            MyWebSite
+            My Website
           </a>
         </div>
       </nav>

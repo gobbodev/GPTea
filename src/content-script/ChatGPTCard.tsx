@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'preact/hooks'
 import favicon from '../favicon.png'
-import ChatGPTQuery, {} from './ChatGPTQuery'
+import ChatGPTQuery from './ChatGPTQuery'
 import { useContext } from 'react'
 import MyContext from './context'
 
