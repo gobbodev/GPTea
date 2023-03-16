@@ -1,0 +1,34 @@
+{
+  "name": "GPTea",
+  "description": "Translate texts quickly with the efficiency and accuracy of ChatGPT.",
+  "default_locale": "en",
+  "version": "0.0.1",
+  "manifest_version": 2,
+  "icons": {
+    "16": "favicon.png",
+    "32": "favicon.png",
+    "48": "favicon.png",
+    "128": "favicon.png"
+  },
+  "permissions": ["storage", "https://*.openai.com/"],
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "browser_action": {
+    "default_title": "GPTea - Translate with accuracy",
+    "default_popup": "popup.html"
+  },
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": ["content-script.js"],
+      "css": ["content-script.css"]
+    }
+  ]
+}
