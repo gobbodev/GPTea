@@ -23,6 +23,10 @@ To build GPTea from source, follow these steps:
 3. Run `npm run build`
 4. Load `build/chromium/` or `build/firefox/` directory into your browser - [Detailed tutorial](https://www.youtube.com/watch?v=dhaGRJvJAII)
 
+## How it works
+![2023-03-16 21-24-07 (1)](https://user-images.githubusercontent.com/101360327/225782727-2302ce20-cfed-409f-b5e2-6dd4a5e5e075.gif)
+
+
 ## Notes
 1. GPTea was built in just one week and may contain some small bugs that will be fixed soon.
 2. Other languages will be added to the "Output Language Support" feature in the near future.
