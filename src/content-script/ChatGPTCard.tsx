@@ -124,7 +124,7 @@ function ChatGPTCard() {
             question={
               'translate this to Brazil portuguese: `' +
               selectedText +
-              '`. Your output need to be just the translation, nothing more. Example: userInpur:`bola`. yourOutput:`ball`.'
+              '`. Your output need to be just the translation, nothing more. Example: userInput:`bola`. yourOutput:`ball`.'
             }
           />
         </div>
