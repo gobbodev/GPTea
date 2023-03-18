@@ -22,10 +22,10 @@ function ChatGPTCard() {
         const range = selection.getRangeAt(0)
         const rect = range.getBoundingClientRect()
 
-        if (rect.left === 0 && rect.bottom === 0){
+        if (rect.left === 0 && rect.bottom === 0) {
           const container = range.commonAncestorContainer
           const selectedElement = container.nodeType === 1 ? container : container.parentNode
-          
+
           if (selectedElement) {
             const inputElement = (selectedElement as HTMLElement).querySelector('input')
 
@@ -33,13 +33,22 @@ function ChatGPTCard() {
               const rect = inputElement.getBoundingClientRect()
               setButtonPosition({ x: rect.left + window.scrollX, y: rect.bottom + window.scrollY })
             } 
+            else {
+              const textElement = (selectedElement as HTMLElement).querySelector('textarea')
+              if (textElement) {
+                const rect = textElement.getBoundingClientRect()
+                setButtonPosition({
+                  x: rect.left + window.scrollX,
+                  y: rect.bottom + window.scrollY,
+                })
+              }
+            }
           }
-        }
-        else{
+        } else {
           setButtonPosition({ x: rect.left + window.scrollX, y: rect.bottom + window.scrollY })
         }
       }
-        console.log('passou')
+      console.log('passou')
     }
     const handleMouseUp = () => {
       if (selectedText) {
