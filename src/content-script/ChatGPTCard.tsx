@@ -1,17 +1,18 @@
 import { useEffect, useState } from 'preact/hooks'
+import { useContext } from 'react'
 import favicon from '../favicon.png'
 import ChatGPTQuery from './ChatGPTQuery'
-import { useContext } from 'react'
 import MyContext from './context'
 
 function ChatGPTCard() {
   const [triggered, setTriggered] = useState(false)
   const [selectedText, setSelectedText] = useState('')
   const [buttonPosition, setButtonPosition] = useState({ x: 0, y: 0 })
-  
+
   const [disableHandleDown, setDisableHandleDown] = useState(false)
 
-  const [, setNextQuestion, overComponents, setOverComponents, showIcon, setShowIcon] = useContext(MyContext)
+  const [, setNextQuestion, overComponents, setOverComponents, showIcon, setShowIcon] =
+    useContext(MyContext)
 
   useEffect(() => {
     const handleSelectionChange = () => {
@@ -20,8 +21,25 @@ function ChatGPTCard() {
       if (selection?.toString()) {
         const range = selection.getRangeAt(0)
         const rect = range.getBoundingClientRect()
-        setButtonPosition({ x: rect.left + window.scrollX, y: rect.bottom + window.scrollY })
+
+        if (rect.left === 0 && rect.bottom === 0){
+          const container = range.commonAncestorContainer
+          const selectedElement = container.nodeType === 1 ? container : container.parentNode
+          
+          if (selectedElement) {
+            const inputElement = (selectedElement as HTMLElement).querySelector('input')
+
+            if (inputElement) {
+              const rect = inputElement.getBoundingClientRect()
+              setButtonPosition({ x: rect.left + window.scrollX, y: rect.bottom + window.scrollY })
+            } 
+          }
+        }
+        else{
+          setButtonPosition({ x: rect.left + window.scrollX, y: rect.bottom + window.scrollY })
+        }
       }
+        console.log('passou')
     }
     const handleMouseUp = () => {
       if (selectedText) {
@@ -41,9 +59,8 @@ function ChatGPTCard() {
       if (!disableHandleDown) {
         setSelectedText('')
         setShowIcon(false)
-       
       }
-      if(overComponents === false){
+      if (overComponents === false) {
         setTriggered(false)
       }
     }
@@ -56,7 +73,7 @@ function ChatGPTCard() {
 
   return (
     <>
-      {(showIcon && buttonPosition.y && buttonPosition.x !== 0 ) && (
+      {showIcon && (
         <div
           className="icon-container"
           style={{
@@ -73,13 +90,13 @@ function ChatGPTCard() {
             setDisableHandleDown(true)
           }}
           onMouseLeave={() => {
-            setDisableHandleDown(false) 
+            setDisableHandleDown(false)
           }}
         >
           <img alt="GPTea Logo" src={favicon} height={30} width={30} />
         </div>
       )}
-      {(triggered) && (
+      {triggered && (
         <div
           className="query-container markdown-body"
           style={{
@@ -94,11 +111,17 @@ function ChatGPTCard() {
             setOverComponents(false) //ultima
           }}
         >
-          <ChatGPTQuery question={"translate this to Brazil portuguese: `" + selectedText + "`. Your output need to be just the translation, nothing more. Example: userInpur:`bola`. yourOutput:`ball`."} /> 
+          <ChatGPTQuery
+            question={
+              'translate this to Brazil portuguese: `' +
+              selectedText +
+              '`. Your output need to be just the translation, nothing more. Example: userInpur:`bola`. yourOutput:`ball`.'
+            }
+          />
         </div>
       )}
     </>
-  )//this is on beta test, soon will be support to other languages 
+  ) //this is on beta test, soon will be support to other languages
 }
 
 export default ChatGPTCard
