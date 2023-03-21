@@ -15,9 +15,10 @@ function ChatGPTCard() {
   const [selectedText, setSelectedText] = useState('')
   const [buttonPosition, setButtonPosition] = useState({ x: 0, y: 0 })
   const [languages, setLanguages] = useState<Language[]>([])
+  const [selectFocused, setSelectFocused] = useState(false)
 
   const [disableHandleDown, setDisableHandleDown] = useState(false)
-  //caixa com opção de select unica para output da tradução
+
   const [
     ,
     setNextQuestion,
@@ -31,11 +32,11 @@ function ChatGPTCard() {
 
   useEffect(() => {
     const getSelAppData = async () => {
-      Browser.storage.local.get('selectedValue').then((result : any) => {
+      Browser.storage.local.get('selectedValue').then((result: any) => {
         setSelectedValue(result.selectedValue)
-        console.log(result);
+        console.log(result)
       })
-     
+
       /*const storedVersion = localStorage.getItem('appVersion')
       const manifestVersion = getExtensionVersion().toString();
       if(storedVersion && storedVersion !== manifestVersion){
@@ -55,15 +56,11 @@ function ChatGPTCard() {
         .get('languagesDB')
         .then((result) => {
           const resultLang = result.languagesDB.languages
-          console.log("sucess")
-          console.log(resultLang)
           setLanguages(resultLang)
         })
         .catch(() => {
           Browser.storage.local.set({ languagesDB: defLanguages })
           setLanguages(defLanguages.languages)
-          console.log("error")
-          console.log(languages);
         })
     }
     getLanData()
@@ -173,8 +170,19 @@ function ChatGPTCard() {
             onMouseLeave={() => {
               setDisableHandleDown(false)
             }}
+            style={{opacity: selectFocused ? 1 : undefined }}
           >
-            <select value={selectedValue} onChange={handleSelectChange} style={{ all: 'revert' }}>
+            <select
+              onBlur={() => {
+                setSelectFocused(false)
+              }}
+              onFocus={() => {
+                setSelectFocused(true)
+              }}
+              value={selectedValue}
+              onChange={handleSelectChange}
+              style={{ all: 'revert'}}
+            >
               {languages.map((language) => (
                 <option key={language.id}>{language.name}</option>
               ))}
@@ -209,7 +217,7 @@ function ChatGPTCard() {
         </div>
       )}
     </>
-  ) //this is on beta test, soon will be support to other languages
+  )
 }
 
 export default ChatGPTCard
