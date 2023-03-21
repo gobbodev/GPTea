@@ -19,7 +19,7 @@ GPTea is a browser extension that allows you to quickly and accurately translate
 To build GPTea from source, follow these steps:
 
 1. Clone the repository
-2. Install dependencies using npm
+2. Install dependencies using `npm i`
 3. Run `npm run build`
 4. Load `build/chromium/` or `build/firefox/` directory into your browser - [Detailed tutorial](https://www.youtube.com/watch?v=dhaGRJvJAII)
 
