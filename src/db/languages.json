@@ -1,0 +1,10 @@
+{
+    "languages": [
+      { "id": 1, "name": "English" },
+      { "id": 2, "name": "Português (Brasil)" },
+      { "id": 3, "name": "Spanish" },
+      { "id": 4, "name": "Japanese" },
+      { "id": 5, "name": "Kannada (India)" }
+    ]
+  }
+  

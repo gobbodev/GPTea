@@ -6,6 +6,7 @@ function ChatGPTContainer() {
   const [showIcon, setShowIcon] = useState(false)
   const [nextQuestion, setNextQuestion] = useState(false)
   const [overComponents, setOverComponents] = useState(false)
+  const [selectedValue, setSelectedValue] = useState("English")
 
   return (
     <MyContext.Provider
@@ -16,6 +17,8 @@ function ChatGPTContainer() {
         setOverComponents,
         showIcon,
         setShowIcon,
+        selectedValue,
+        setSelectedValue,
       ]}
     >
       <ChatGPTCard />

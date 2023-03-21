@@ -17,9 +17,7 @@ function ChatGPTQuery(props: Props) {
   const [answer, setAnswer] = useState<Answer | null>(null) 
   const [error, setError] = useState('')
   const [retry, setRetry] = useState(0)
-  const [done, setDone] = useState(false)
   const [nextQuestion, setNextQuestion, , setOverComponents, , setShowIcon] = useContext(MyContext)
-  const [showTip, setShowTip] = useState(false)
   const [status, setStatus] = useState<QueryStatus>()
   const [isTextCopy, setIsTextCopy] = useState(false)
 
@@ -41,7 +39,7 @@ function ChatGPTQuery(props: Props) {
           setStatus('error')
         } else if (msg.event === 'DONE') {
           // se a mensagem tem um evento 'DONE', significa que a consulta foi concluída
-          setDone(true)
+         
           setNextQuestion(true)
           setIsTextCopy(false)
         }
@@ -76,17 +74,7 @@ function ChatGPTQuery(props: Props) {
       window.removeEventListener('focus', onFocus)
     }
   }, [error])
-
-  useEffect(() => {
-    shouldShowRatingTip().then((show) => setShowTip(show))
-  }, [])
-
-  useEffect(() => {
-    if (status === 'success') {
-      captureEvent('show_answer', { host: location.host, language: navigator.language })
-    }
-  }, [props.question, status])
-
+  
   const openOptionsPage = useCallback(() => {
     Browser.runtime.sendMessage({ type: 'OPEN_OPTIONS_PAGE' })
   }, [])

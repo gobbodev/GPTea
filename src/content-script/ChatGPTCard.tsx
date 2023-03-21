@@ -1,19 +1,56 @@
 import { useEffect, useState } from 'preact/hooks'
 import { useContext } from 'react'
+import defLanguages from '../db/languages.json'
 import favicon from '../favicon.png'
 import ChatGPTQuery from './ChatGPTQuery'
 import MyContext from './context'
+
+interface Language {
+  id: number
+  name: string
+}
 
 function ChatGPTCard() {
   const [triggered, setTriggered] = useState(false)
   const [selectedText, setSelectedText] = useState('')
   const [buttonPosition, setButtonPosition] = useState({ x: 0, y: 0 })
+  const [languages, setLanguages] = useState<Language[]>([])
 
   const [disableHandleDown, setDisableHandleDown] = useState(false)
+  //caixa com opção de select unica para output da tradução
+  const [
+    ,
+    setNextQuestion,
+    overComponents,
+    setOverComponents,
+    showIcon,
+    setShowIcon,
+    selectedValue,
+    setSelectedValue,
+  ] = useContext(MyContext)
 
-  const [, setNextQuestion, overComponents, setOverComponents, showIcon, setShowIcon] =
-    useContext(MyContext)
-
+  useEffect(() => {
+    const getSelData = async () => {
+      const storedValue = localStorage.getItem('selectedValue')
+      if (storedValue) {
+        setSelectedValue(storedValue)
+      }
+    }
+    getSelData()
+  }, [])
+  useEffect(() => {
+    const getLanData = async () => {
+      const storedLanguage: any = localStorage.getItem('languagesDB')
+      if (storedLanguage) {
+        const parsedLanguage = await JSON.parse(storedLanguage)
+        setLanguages(parsedLanguage[0].languages)
+      } else {
+        localStorage.setItem('languagesDB', JSON.stringify([defLanguages]))
+        setLanguages(defLanguages.languages)
+      }
+    }
+    getLanData()
+  }, [])
   useEffect(() => {
     const handleSelectionChange = () => {
       const selection = window.getSelection()
@@ -32,8 +69,7 @@ function ChatGPTCard() {
             if (inputElement) {
               const rect = inputElement.getBoundingClientRect()
               setButtonPosition({ x: rect.left + window.scrollX, y: rect.bottom + window.scrollY })
-            } 
-            else {
+            } else {
               const textElement = (selectedElement as HTMLElement).querySelector('textarea')
               if (textElement) {
                 const rect = textElement.getBoundingClientRect()
@@ -48,7 +84,6 @@ function ChatGPTCard() {
           setButtonPosition({ x: rect.left + window.scrollX, y: rect.bottom + window.scrollY })
         }
       }
-      console.log('passou')
     }
     const handleMouseUp = () => {
       if (selectedText) {
@@ -80,29 +115,54 @@ function ChatGPTCard() {
     }
   }, [disableHandleDown, overComponents])
 
+  const handleSelectChange = (e: any) => {
+    const value = e.target.value
+    setSelectedValue(value)
+    localStorage.setItem('selectedValue', value)
+  }
+
   return (
     <>
       {showIcon && (
         <div
-          className="icon-container"
+          className="tea-container"
           style={{
             position: 'absolute',
             left: buttonPosition.x,
             top: buttonPosition.y,
           }}
-          onClick={() => {
-            setTriggered(true)
-            setShowIcon(false)
-            setNextQuestion(false)
-          }}
-          onMouseOver={() => {
-            setDisableHandleDown(true)
-          }}
-          onMouseLeave={() => {
-            setDisableHandleDown(false)
-          }}
         >
-          <img alt="GPTea Logo" src={favicon} height={30} width={30} />
+          <div
+            className="icon-container"
+            onClick={() => {
+              setTriggered(true)
+              setShowIcon(false)
+              setNextQuestion(false)
+            }}
+            onMouseOver={() => {
+              setDisableHandleDown(true)
+            }}
+            onMouseLeave={() => {
+              setDisableHandleDown(false)
+            }}
+          >
+            <img alt="GPTea Logo" src={favicon} height={30} width={30} />
+          </div>
+          <div
+            className="select-container"
+            onMouseOver={() => {
+              setDisableHandleDown(true)
+            }}
+            onMouseLeave={() => {
+              setDisableHandleDown(false)
+            }}
+          >
+            <select value={selectedValue} onChange={handleSelectChange} style={{ all: 'revert' }}>
+              {languages.map((language) => (
+                <option key={language.id}>{language.name}</option>
+              ))}
+            </select>
+          </div>
         </div>
       )}
       {triggered && (
@@ -117,14 +177,16 @@ function ChatGPTCard() {
             setOverComponents(true)
           }}
           onMouseLeave={() => {
-            setOverComponents(false) //ultima
+            setOverComponents(false)
           }}
         >
           <ChatGPTQuery
             question={
-              'translate this to Brazil portuguese: `' +
+              'translate this `' +
               selectedText +
-              '`. Your output need to be just the translation, nothing more. Example: userInput:`bola`. yourOutput:`ball`.'
+              '` to ' +
+              selectedValue +
+              ' . Your output need to be just the translation, nothing more.'
             }
           />
         </div>

@@ -4,20 +4,45 @@
 .chat-gpt-container {
   flex-basis: 0;
   flex-grow: 1;
-  width: 0;
-  height: 0;
-  .icon-container {
-    cursor: pointer;
+  width: 0!important;
+  height: 0 !important;
+  .tea-container {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
     z-index: 9991;
-    img {
-      border: 1px solid rgb(13, 17, 23);
-      border-radius: 20px;
-      transition: 0.1s linear all;
-    }
-    &:hover {
+    .icon-container {
+      cursor: pointer;
+      width: fit-content;
       img {
-        width: 32px;
-        height: 32px;
+        border-radius: 20px;
+        transition: 0.1s linear all;
+      }
+      &:hover {
+        img {
+          width: 32px;
+          height: 32px;
+        }
+        & + .select-container {
+          opacity: 1;
+        }
+      }
+    }
+    .select-container {
+      opacity: 0;
+      transition: 0.1s linear all;
+      width: fit-content;
+      select {
+        background-color: rgb(13, 17, 23) !important;
+        color: #dfdfdf !important;
+        cursor: pointer !important;
+        border-radius: 5px !important;
+        border: 2px solid #dfdfdf !important;
+        padding: 2px 5px !important;
+        font-size: 13px !important;
+      }
+      &:hover {
+        opacity: 1;
       }
     }
   }
