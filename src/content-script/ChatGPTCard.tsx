@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'preact/hooks'
 import { useContext } from 'react'
+import Browser from 'webextension-polyfill'
 import defLanguages from '../db/languages.json'
 import favicon from '../favicon.png'
 import ChatGPTQuery from './ChatGPTQuery'
 import MyContext from './context'
-
 interface Language {
   id: number
   name: string
@@ -30,24 +30,41 @@ function ChatGPTCard() {
   ] = useContext(MyContext)
 
   useEffect(() => {
-    const getSelData = async () => {
-      const storedValue = localStorage.getItem('selectedValue')
-      if (storedValue) {
-        setSelectedValue(storedValue)
+    const getSelAppData = async () => {
+      Browser.storage.local.get('selectedValue').then((result : any) => {
+        setSelectedValue(result.selectedValue)
+        console.log(result);
+      })
+     
+      /*const storedVersion = localStorage.getItem('appVersion')
+      const manifestVersion = getExtensionVersion().toString();
+      if(storedVersion && storedVersion !== manifestVersion){
+        localStorage.setItem('languagesDB', JSON.stringify([defLanguages]))
+        localStorage.setItem('appVersion', manifestVersion)
       }
+      else{
+        localStorage.setItem('languagesDB', JSON.stringify([defLanguages]))
+        localStorage.setItem('appVersion', manifestVersion)
+      } */
     }
-    getSelData()
+    getSelAppData()
   }, [])
   useEffect(() => {
     const getLanData = async () => {
-      const storedLanguage: any = localStorage.getItem('languagesDB')
-      if (storedLanguage) {
-        const parsedLanguage = await JSON.parse(storedLanguage)
-        setLanguages(parsedLanguage[0].languages)
-      } else {
-        localStorage.setItem('languagesDB', JSON.stringify([defLanguages]))
-        setLanguages(defLanguages.languages)
-      }
+      Browser.storage.local
+        .get('languagesDB')
+        .then((result) => {
+          const resultLang = result.languagesDB.languages
+          console.log("sucess")
+          console.log(resultLang)
+          setLanguages(resultLang)
+        })
+        .catch(() => {
+          Browser.storage.local.set({ languagesDB: defLanguages })
+          setLanguages(defLanguages.languages)
+          console.log("error")
+          console.log(languages);
+        })
     }
     getLanData()
   }, [])
@@ -118,7 +135,7 @@ function ChatGPTCard() {
   const handleSelectChange = (e: any) => {
     const value = e.target.value
     setSelectedValue(value)
-    localStorage.setItem('selectedValue', value)
+    Browser.storage.local.set({ selectedValue: value })
   }
 
   return (

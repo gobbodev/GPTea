@@ -40,6 +40,9 @@
         border: 2px solid #dfdfdf !important;
         padding: 2px 5px !important;
         font-size: 13px !important;
+        option{
+          opacity: 0 !important;
+        }
       }
       &:hover {
         opacity: 1;

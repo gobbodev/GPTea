@@ -2,9 +2,11 @@
     "languages": [
       { "id": 1, "name": "English" },
       { "id": 2, "name": "Português (Brasil)" },
-      { "id": 3, "name": "Spanish" },
-      { "id": 4, "name": "Japanese" },
-      { "id": 5, "name": "Kannada (India)" }
+      { "id": 3, "name": "Espãnol" },
+      { "id": 5, "name": "Deutsch" },
+      { "id": 6, "name": "日本" },
+      { "id": 7, "name": "हिंदी (India)" },
+      { "id": 8, "name": "русский" }
     ]
   }
   
