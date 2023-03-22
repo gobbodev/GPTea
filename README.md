@@ -11,7 +11,7 @@ GPTea is a browser extension that allows you to quickly and accurately translate
 - Dark mode
 - Copy to clipboard
 - Input language support: any
-- Output language support: English, Português (Brasil), Espãnol, Deutsch, 日本, हिंदी (India), русский
+- Output language support: any
 
 
 ## Build from source
