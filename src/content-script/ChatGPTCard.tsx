@@ -11,7 +11,7 @@ interface Language {
   name: string
 }
 interface LanguageData {
-  languages: Language[];
+  languages: Language[]
 }
 function ChatGPTCard() {
   const [triggered, setTriggered] = useState(false)
@@ -38,12 +38,29 @@ function ChatGPTCard() {
 
   useEffect(() => {
     const getSelAppData = async () => {
+      /*
+      Browser.storage.local.remove('selectedValue')
+      Browser.storage.local.remove('marginValue')
+      Browser.storage.local.remove('languagesDB')
+      */
       Browser.storage.local
         .get('selectedValue')
         .then((result: any) => {
           setSelectedValue(result.selectedValue)
         })
         .catch()
+      Browser.storage.local
+        .get('marginValue')
+        .then((result: any) => {
+          if (result.marginValue) {
+            setMarginTopSVG(parseInt(result.marginValue))
+            console.log('aB')
+            console.log(result.marginValue)
+          }
+        })
+        .catch(() => {
+          Browser.storage.local.set({ marginValue: marginTopSVG.toString() })
+        })
 
       /*//controle de versao do DB local
       Browser.storage.local.get('gpteaVersion').then((result: any) => {
@@ -67,7 +84,7 @@ function ChatGPTCard() {
         })
         .catch(() => {
           Browser.storage.local.set({ languagesDB: defLanguages })
-          console.log("default: ")
+          console.log('default: ')
           console.log(defLanguages)
           setLanguages(defLanguages.languages)
         })
@@ -151,12 +168,14 @@ function ChatGPTCard() {
     const formData = new FormData(form)
     const name = formData.get('languageInput') as string
     const newLanguage: Language = { id: languages.length + 1, name }
-    const updatedLanguages: LanguageData  = {languages: [...languages, newLanguage]}
+    const updatedLanguages: LanguageData = { languages: [...languages, newLanguage] }
     setLanguages([...languages, newLanguage])
-    Browser.storage.local.set({languagesDB: updatedLanguages })
-    setSelectedValue(name);
+    Browser.storage.local.set({ languagesDB: updatedLanguages })
+    setSelectedValue(name)
     Browser.storage.local.set({ selectedValue: name })
     setMarginTopSVG(marginTopSVG + 16)
+    Browser.storage.local.set({ marginValue: (marginTopSVG + 16).toString() })
+    console.log('C')
     form.reset()
   }
 
@@ -222,9 +241,7 @@ function ChatGPTCard() {
           </div>
           <div
             className="add-container"
-            style={
-               
-              showAddInput ? { marginTop: '-15px' } : { marginTop: marginTopSVG.toString() + "px" }}
+            style={showAddInput ? { marginTop: '-15px' } : { marginTop: marginTopSVG + 'px' }}
             onMouseOver={() => {
               setDisableHandleDown(true)
             }}
