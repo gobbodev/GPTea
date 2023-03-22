@@ -1,7 +1,6 @@
 import { DiffAddedIcon } from '@primer/octicons-react'
 import { useEffect, useState } from 'preact/hooks'
 import { useContext } from 'react'
-import { UNDEFINED } from 'swr/_internal'
 import Browser from 'webextension-polyfill'
 import defLanguages from '../db/languages.json'
 import favicon from '../favicon.png'
@@ -46,7 +45,7 @@ function ChatGPTCard() {
         })
         .catch()
 
-      /*//controle de versao
+      /*//controle de versao do DB local
       Browser.storage.local.get('gpteaVersion').then((result: any) => {
         const manifestVersion = getExtensionVersion();
         if(result.gpteaVersion !== manifestVersion){
@@ -59,7 +58,6 @@ function ChatGPTCard() {
     getSelAppData()
   }, [])
   useEffect(() => {
-    Browser.storage.local.remove("languagesDB")
     const getLanData = async () => {
       Browser.storage.local
         .get('languagesDB')
@@ -157,6 +155,7 @@ function ChatGPTCard() {
     setLanguages([...languages, newLanguage])
     Browser.storage.local.set({languagesDB: updatedLanguages })
     setSelectedValue(name);
+    Browser.storage.local.set({ selectedValue: name })
     setMarginTopSVG(marginTopSVG + 16)
     form.reset()
   }
