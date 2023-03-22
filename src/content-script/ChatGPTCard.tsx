@@ -54,8 +54,7 @@ function ChatGPTCard() {
         .then((result: any) => {
           if (result.marginValue) {
             setMarginTopSVG(parseInt(result.marginValue))
-            console.log('aB')
-            console.log(result.marginValue)
+         
           }
         })
         .catch(() => {
@@ -84,8 +83,6 @@ function ChatGPTCard() {
         })
         .catch(() => {
           Browser.storage.local.set({ languagesDB: defLanguages })
-          console.log('default: ')
-          console.log(defLanguages)
           setLanguages(defLanguages.languages)
         })
     }
@@ -175,7 +172,6 @@ function ChatGPTCard() {
     Browser.storage.local.set({ selectedValue: name })
     setMarginTopSVG(marginTopSVG + 16)
     Browser.storage.local.set({ marginValue: (marginTopSVG + 16).toString() })
-    console.log('C')
     form.reset()
   }
 
