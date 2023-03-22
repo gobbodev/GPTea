@@ -1,5 +1,7 @@
+import { DiffAddedIcon } from '@primer/octicons-react'
 import { useEffect, useState } from 'preact/hooks'
 import { useContext } from 'react'
+import { UNDEFINED } from 'swr/_internal'
 import Browser from 'webextension-polyfill'
 import defLanguages from '../db/languages.json'
 import favicon from '../favicon.png'
@@ -9,13 +11,18 @@ interface Language {
   id: number
   name: string
 }
-
+interface LanguageData {
+  languages: Language[];
+}
 function ChatGPTCard() {
   const [triggered, setTriggered] = useState(false)
-  const [selectedText, setSelectedText] = useState('')
+  const [selectFrom, setSelectFrom] = useState('')
   const [buttonPosition, setButtonPosition] = useState({ x: 0, y: 0 })
   const [languages, setLanguages] = useState<Language[]>([])
   const [selectFocused, setSelectFocused] = useState(false)
+  const [showAddBtn, setShowAddBtn] = useState(false)
+  const [showAddInput, setShowAddInput] = useState(false)
+  const [marginTopSVG, setMarginTopSVG] = useState(123)
 
   const [disableHandleDown, setDisableHandleDown] = useState(false)
 
@@ -32,25 +39,27 @@ function ChatGPTCard() {
 
   useEffect(() => {
     const getSelAppData = async () => {
-      Browser.storage.local.get('selectedValue').then((result: any) => {
-        setSelectedValue(result.selectedValue)
-        console.log(result)
-      })
+      Browser.storage.local
+        .get('selectedValue')
+        .then((result: any) => {
+          setSelectedValue(result.selectedValue)
+        })
+        .catch()
 
-      /*const storedVersion = localStorage.getItem('appVersion')
-      const manifestVersion = getExtensionVersion().toString();
-      if(storedVersion && storedVersion !== manifestVersion){
-        localStorage.setItem('languagesDB', JSON.stringify([defLanguages]))
-        localStorage.setItem('appVersion', manifestVersion)
-      }
-      else{
-        localStorage.setItem('languagesDB', JSON.stringify([defLanguages]))
-        localStorage.setItem('appVersion', manifestVersion)
-      } */
+      /*//controle de versao
+      Browser.storage.local.get('gpteaVersion').then((result: any) => {
+        const manifestVersion = getExtensionVersion();
+        if(result.gpteaVersion !== manifestVersion){
+          Browser.storage.local.set({gpteaVersion: manifestVersion})
+        }
+      }).catch(() => {
+        Browser.storage.local.set({gpteaVersion: getExtensionVersion()})
+      })*/
     }
     getSelAppData()
   }, [])
   useEffect(() => {
+    Browser.storage.local.remove("languagesDB")
     const getLanData = async () => {
       Browser.storage.local
         .get('languagesDB')
@@ -60,6 +69,8 @@ function ChatGPTCard() {
         })
         .catch(() => {
           Browser.storage.local.set({ languagesDB: defLanguages })
+          console.log("default: ")
+          console.log(defLanguages)
           setLanguages(defLanguages.languages)
         })
     }
@@ -68,7 +79,7 @@ function ChatGPTCard() {
   useEffect(() => {
     const handleSelectionChange = () => {
       const selection = window.getSelection()
-      setSelectedText(selection?.toString() || '')
+      setSelectFrom(selection?.toString() || '')
       if (selection?.toString()) {
         const range = selection.getRangeAt(0)
         const rect = range.getBoundingClientRect()
@@ -100,7 +111,7 @@ function ChatGPTCard() {
       }
     }
     const handleMouseUp = () => {
-      if (selectedText) {
+      if (selectFrom) {
         setShowIcon(true)
       }
     }
@@ -110,13 +121,15 @@ function ChatGPTCard() {
       document.removeEventListener('selectionchange', handleSelectionChange)
       document.removeEventListener('mouseup', handleMouseUp)
     }
-  }, [selectedText])
+  }, [selectFrom])
 
   useEffect(() => {
     const handleMouseDown = () => {
       if (!disableHandleDown) {
-        setSelectedText('')
+        setSelectFrom('')
         setShowIcon(false)
+        setShowAddBtn(false)
+        setShowAddInput(false)
       }
       if (overComponents === false) {
         setTriggered(false)
@@ -133,6 +146,19 @@ function ChatGPTCard() {
     const value = e.target.value
     setSelectedValue(value)
     Browser.storage.local.set({ selectedValue: value })
+  }
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    const form = e.currentTarget
+    const formData = new FormData(form)
+    const name = formData.get('languageInput') as string
+    const newLanguage: Language = { id: languages.length + 1, name }
+    const updatedLanguages: LanguageData  = {languages: [...languages, newLanguage]}
+    setLanguages([...languages, newLanguage])
+    Browser.storage.local.set({languagesDB: updatedLanguages })
+    setSelectedValue(name);
+    setMarginTopSVG(marginTopSVG + 16)
+    form.reset()
   }
 
   return (
@@ -160,7 +186,7 @@ function ChatGPTCard() {
               setDisableHandleDown(false)
             }}
           >
-            <img alt="GPTea Logo" src={favicon} height={30} width={30} />
+            <img alt="GPTea Logo" src={favicon} height={32} width={32} />
           </div>
           <div
             className="select-container"
@@ -170,23 +196,71 @@ function ChatGPTCard() {
             onMouseLeave={() => {
               setDisableHandleDown(false)
             }}
-            style={{opacity: selectFocused ? 1 : undefined }}
+            style={
+              selectFocused || showAddInput ? { opacity: 1, visibility: 'visible' } : undefined
+            }
           >
             <select
               onBlur={() => {
                 setSelectFocused(false)
+                setShowAddBtn(false)
               }}
               onFocus={() => {
                 setSelectFocused(true)
               }}
+              onClick={() => {
+                setShowAddBtn(!showAddBtn)
+                setShowAddInput(false)
+              }}
               value={selectedValue}
               onChange={handleSelectChange}
-              style={{ all: 'revert'}}
+              style={{ all: 'revert' }}
             >
               {languages.map((language) => (
                 <option key={language.id}>{language.name}</option>
               ))}
             </select>
+          </div>
+          <div
+            className="add-container"
+            style={
+               
+              showAddInput ? { marginTop: '-15px' } : { marginTop: marginTopSVG.toString() + "px" }}
+            onMouseOver={() => {
+              setDisableHandleDown(true)
+            }}
+          >
+            <div
+              className="svg-container"
+              onClick={() => {
+                setShowAddInput(true)
+                setShowAddBtn(false)
+              }}
+              style={showAddBtn ? { visibility: 'visible', opacity: 1 } : undefined}
+            >
+              <DiffAddedIcon fill="#dfdfdf" size={18} />
+            </div>
+            <form
+              onSubmit={handleSubmit}
+              style={showAddInput ? { visibility: 'visible', opacity: 1 } : undefined}
+            >
+              <input
+                placeholder="New language"
+                type="text"
+                id="languageInput"
+                name="languageInput"
+                required
+              />
+              <button
+                type="submit"
+                onClick={() => {
+                  setShowAddInput(false)
+                  setSelectFocused(true)
+                }}
+              >
+                Add
+              </button>
+            </form>
           </div>
         </div>
       )}
@@ -208,7 +282,7 @@ function ChatGPTCard() {
           <ChatGPTQuery
             question={
               'translate this `' +
-              selectedText +
+              selectFrom +
               '` to ' +
               selectedValue +
               ' . Your output need to be just the translation, nothing more.'

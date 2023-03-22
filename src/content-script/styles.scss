@@ -4,7 +4,7 @@
 .chat-gpt-container {
   flex-basis: 0;
   flex-grow: 1;
-  width: 0!important;
+  width: 0 !important;
   height: 0 !important;
   .tea-container {
     display: flex;
@@ -19,19 +19,21 @@
         transition: 0.1s linear all;
       }
       &:hover {
-        img {
-          width: 32px;
-          height: 32px;
-        }
         & + .select-container {
           opacity: 1;
+          visibility: visible;
         }
       }
     }
     .select-container {
-      opacity: 0;
-      transition: 0.1s linear all;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       width: fit-content;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.1s linear, visibility 0.1s linear;
+
       select {
         background-color: rgb(13, 17, 23) !important;
         color: #dfdfdf !important;
@@ -43,6 +45,46 @@
       }
       &:hover {
         opacity: 1;
+        visibility: visible;
+      }
+    }
+    .add-container {
+      position: relative;
+      .svg-container {
+        width: fit-content;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.1s linear, visibility 0.1s linear;
+        margin-left: 60px;
+        svg {
+          background-color: rgb(13, 17, 23);
+          border-radius: 5px;
+        }
+        &:hover {
+          cursor: pointer;
+        }
+      }
+      form {
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.1s linear, visibility 0.1s linear;
+        input {
+          background-color: rgb(13, 17, 23) !important;
+          color: #dfdfdf !important;
+          padding: 3px 8px !important;
+          font-size: 13px !important;
+          border-radius: 5px !important;
+          border: 2px solid #dfdfdf !important;
+          width: 121px !important;
+        }
+        button {
+          background-color: rgb(13, 17, 23) !important;
+          border-radius: 5px !important;
+          color: #dfdfdf !important;
+          margin-left: 5px !important;
+          transition: 0.1s linear all;
+          cursor: pointer;
+        }
       }
     }
   }
