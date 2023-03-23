@@ -30,9 +30,7 @@ To build GPTea from source, follow these steps:
 
 
 ## Notes
-1. GPTea was built in just one week and may contain some small bugs that will be fixed soon.
-2. Other languages will be added to the "Output Language Support" feature in the near future.
-3. Special thanks & credits to [wong2](https://github.com/wong2). 
+1. Special thanks & credits to [wong2](https://github.com/wong2). 
 
 ### Available soon on Chrome Web Store
 
