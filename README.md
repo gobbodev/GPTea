@@ -31,6 +31,7 @@ To build GPTea from source, follow these steps:
 
 ## Notes
 1. Special thanks & credits to [wong2](https://github.com/wong2). 
+2. Grammar correction coming soon.
 
 ### Available soon on Chrome Web Store
 
