@@ -13,10 +13,10 @@ interface Language {
 interface LanguageData {
   languages: Language[]
 }
+
 function ChatGPTCard() {
   const [triggered, setTriggered] = useState(false)
-  const [selectFrom, setSelectFrom] = useState('')
-  const [buttonPosition, setButtonPosition] = useState({ x: 0, y: 0 })
+  const [questionFromSelection, setQuestionFromSelection] = useState('')
   const [languages, setLanguages] = useState<Language[]>([])
   const [selectFocused, setSelectFocused] = useState(false)
   const [showAddBtn, setShowAddBtn] = useState(false)
@@ -34,6 +34,8 @@ function ChatGPTCard() {
     setShowIcon,
     selectedValue,
     setSelectedValue,
+    buttonPosition, 
+    setButtonPosition
   ] = useContext(MyContext)
 
   useEffect(() => {
@@ -91,7 +93,7 @@ function ChatGPTCard() {
   useEffect(() => {
     const handleSelectionChange = () => {
       const selection = window.getSelection()
-      setSelectFrom(selection?.toString() || '')
+      setQuestionFromSelection(selection?.toString() || '')
       if (selection?.toString()) {
         const range = selection.getRangeAt(0)
         const rect = range.getBoundingClientRect()
@@ -123,7 +125,7 @@ function ChatGPTCard() {
       }
     }
     const handleMouseUp = () => {
-      if (selectFrom) {
+      if (questionFromSelection) {
         setShowIcon(true)
       }
     }
@@ -133,12 +135,12 @@ function ChatGPTCard() {
       document.removeEventListener('selectionchange', handleSelectionChange)
       document.removeEventListener('mouseup', handleMouseUp)
     }
-  }, [selectFrom])
+  }, [questionFromSelection])
 
   useEffect(() => {
     const handleMouseDown = () => {
       if (!disableHandleDown) {
-        setSelectFrom('')
+        setQuestionFromSelection('')
         setShowIcon(false)
         setShowAddBtn(false)
         setShowAddInput(false)
@@ -294,10 +296,10 @@ function ChatGPTCard() {
           <ChatGPTQuery
             question={
               'translate this `' +
-              selectFrom +
+              questionFromSelection +
               '` to ' +
               selectedValue +
-              ' . Your output need to be just the translation, nothing more.'
+              '. Attention: I want your output to be just the translation.'
             }
           />
         </div>
