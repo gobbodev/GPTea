@@ -1,6 +1,6 @@
 # GPTea - Translate texts quickly with ChatGPT
 
-GPTea is a browser extension that allows you to quickly and accurately translate text using the power of ChatGPT from your selection. It supports markdown rendering, code highlighting, dark mode, and copy to clipboard functionality.
+GPTea is a browser extension that allows you to quickly and accurately translate text from your selection using the power of ChatGPT. It supports markdown rendering, code highlighting, dark mode, and copy to clipboard functionality.
 
 ## Features
 
