@@ -1,6 +1,9 @@
 @import 'light.scss';
 @import 'dark.scss';
 
+html{
+  overflow: overlay !important; // temporary solution
+}
 .chat-gpt-container {
   width: fit-content !important;
   .tea-container {

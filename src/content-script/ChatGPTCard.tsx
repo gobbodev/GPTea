@@ -6,6 +6,7 @@ import defLanguages from '../db/languages.json'
 import favicon from '../favicon.png'
 import ChatGPTQuery from './ChatGPTQuery'
 import MyContext from './context'
+
 interface Language {
   id: number
   name: string
@@ -25,6 +26,7 @@ function ChatGPTCard() {
 
   const [disableHandleDown, setDisableHandleDown] = useState(false)
 
+  //selectedValue -> select language
   const [
     ,
     setNextQuestion,
@@ -34,12 +36,12 @@ function ChatGPTCard() {
     setShowIcon,
     selectedValue,
     setSelectedValue,
-    buttonPosition, 
-    setButtonPosition
+    buttonPosition,
+    setButtonPosition,
   ] = useContext(MyContext)
 
   useEffect(() => {
-    const getSelAppData = async () => {
+    const getSelectedAppData = async () => {
       /*
       Browser.storage.local.remove('selectedValue')
       Browser.storage.local.remove('marginValue')
@@ -56,7 +58,6 @@ function ChatGPTCard() {
         .then((result: any) => {
           if (result.marginValue) {
             setMarginTopSVG(parseInt(result.marginValue))
-         
           }
         })
         .catch(() => {
@@ -73,7 +74,7 @@ function ChatGPTCard() {
         Browser.storage.local.set({gpteaVersion: getExtensionVersion()})
       })*/
     }
-    getSelAppData()
+    getSelectedAppData()
   }, [])
   useEffect(() => {
     const getLanData = async () => {
@@ -104,7 +105,6 @@ function ChatGPTCard() {
 
           if (selectedElement) {
             const inputElement = (selectedElement as HTMLElement).querySelector('input')
-
             if (inputElement) {
               const rect = inputElement.getBoundingClientRect()
               setButtonPosition({ x: rect.left + window.scrollX, y: rect.bottom + window.scrollY })

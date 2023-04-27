@@ -1,4 +1,4 @@
-import { MarkGithubIcon , GlobeIcon } from '@primer/octicons-react'
+import { GlobeIcon, MarkGithubIcon } from '@primer/octicons-react'
 import './styles.scss'
 
 function App() {
@@ -9,19 +9,19 @@ function App() {
       </div>
       <div className="content">
         <div className="links-container">
-          <a target={'_blank'} href='https://github.com/gobbodev/GPTea'><MarkGithubIcon  size={16} /> Github</a>
-          <a target={'_blank'} href='https://gobbo.dev/'><GlobeIcon size={16} /> My Website</a>
+          <a target={'_blank'} href="https://github.com/gobbodev/GPTea" rel="noreferrer">
+            <MarkGithubIcon size={16} /> Github
+          </a>
+          <a target={'_blank'} href="https://gobbo.dev/" rel="noreferrer">
+            <GlobeIcon size={16} /> My Website
+          </a>
         </div>
         <div className="features-container">
           <h2>Features Coming Soon:</h2>
           <p>
             - Grammar correction
             <br />
-            - Output in multiple languages
-            <br />
             - Example sentences for words
-            <br />
-            - Saving translations and example sentences
             <br />
             - Translation by explicit input (not just by selection)
             <br />
